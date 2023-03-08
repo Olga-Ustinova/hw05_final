@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load thumbnail %}
+  <title> {{ group.title }} </title>
+  <body>
+    <header>
+      {% include 'includes/header.html' %}
+    </header>
+    <main>
+      {% block content %}
+        <h1> {{ text }} </h1>
+        <p>
+          {{ text_group }}
+        </p>
+        <article>
+      {% for post in page_obj %}
+        {% include 'includes/post_card.html' %}
+      {% if not forloop.last %}<hr>{% endif %}
+      {% endfor %}
+      {% include 'posts/includes/paginator.html' %}
+        </article>
+      {% endblock %}
+    </main>
+    <footer class="border-top text-center py-3">
+      {% include 'includes/footer.html' %}   
+    </footer>
+  </body>

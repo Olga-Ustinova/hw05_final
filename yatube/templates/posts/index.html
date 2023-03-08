@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load thumbnail %}
+{% load cache %}
+  <title> {{ title }} </title>
+  <body>
+    <header>
+      {% include 'includes/header.html' %}
+    </header>
+    <main>
+      {% block content %}
+      {% include 'posts/includes/switcher.html' %}
+        <h1> {{ text }} </h1>
+        <article>
+          {% cache 20 index_page page_obj %}
+          {% for post in page_obj %}
+            {% include 'includes/post_card.html' %}
+          {% if post.group %}
+          <a href="{% url 'posts:group_list' post.group.slug %}">все записи группы</a>
+          {% endif %}
+          {% if not forloop.last %}<hr>{% endif %}
+          {% endfor %}
+          {% endcache %}
+          {% include 'posts/includes/paginator.html' %}
+        </article>
+      {% endblock %}
+    </main>
+    <footer class="border-top text-center py-3">
+      {% include 'includes/footer.html' %}   
+    </footer>
+  </body>
