@@ -206,8 +206,7 @@ class PaginatorViewsTest(TestCase):
         Post.objects.bulk_create(
             [Post(author=self.user_auth,
                   text='Пост',
-                  group=self.group,
-                  image='posts/small.gif')
+                  group=self.group)
                 for _ in range(13)]
         )
 

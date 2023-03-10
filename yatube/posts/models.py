@@ -42,8 +42,6 @@ class Post(CreatedModel):
         upload_to='posts/',
         blank=True
     )
-    # Аргумент upload_to указывает директорию,
-    # в которую будут загружаться пользовательские файлы.
 
     class Meta:
         ordering = ['-created']
@@ -76,7 +74,7 @@ class Comment(CreatedModel):
     )
 
     class Meta:
-        ordering = ['-created']
+        default_related_name = 'comments'
         verbose_name = 'Комментарий'
         verbose_name_plural = 'Комментарии'
 

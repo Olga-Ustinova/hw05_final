@@ -127,10 +127,7 @@ def add_comment(request, post_id):
 
 @login_required
 def follow_index(request):
-    follow = Follow.objects.select_related('user')
-    author = follow.values('author')
-    post = Post.objects.select_related('author').filter(
-        author__in=author)
+    post = Post.objects.filter(author__following__user=request.user)
     page_obj = paginator(request, post)
     context = {'page_obj': page_obj}
     return render(request, 'posts/follow.html', context)
@@ -139,16 +136,13 @@ def follow_index(request):
 @login_required
 def profile_follow(request, username):
     author = get_object_or_404(User, username=username)
-    if author != request.user and not Follow.objects.filter(
-        user=request.user, author=author
-    ).exists():
-        Follow.objects.create(user=request.user, author=author)
+    if request.user != author:
+        Follow.objects.get_or_create(user=request.user, author=author)
     return redirect('posts:profile', username=author.username)
 
 
 @login_required
 def profile_unfollow(request, username):
     author = get_object_or_404(User, username=username)
-    follower = Follow.objects.filter(user=request.user, author=author).all()
-    follower.delete()
+    Follow.objects.filter(user=request.user, author=author).delete()
     return redirect('posts:profile', username=author.username)
